@@ -5,8 +5,21 @@ import "leaflet/dist/leaflet.css";
 import "../css/Property.css";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import L from "leaflet";
+import markerIconPng from "leaflet/dist/images/marker-icon.png";
+import markerShadowPng from "leaflet/dist/images/marker-shadow.png";
 
+// default icon fix
+const DefaultIcon = L.icon({
+    iconUrl: markerIconPng,
+    shadowUrl: markerShadowPng,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41],
+});
 
+L.Marker.prototype.options.icon = DefaultIcon;
 
 function PropertyList() {
     const token = Cookies.get("token");
@@ -15,11 +28,12 @@ function PropertyList() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`${import.meta.env.VITE_BACK_API}/api/property`, {
-            headers: { Authorization: token }
-        })
-            .then(res => setProperties(res.data))
-            .catch(err => console.log(err));
+        axios
+            .get(`${import.meta.env.VITE_BACK_API}/api/property`, {
+                headers: { Authorization: token },
+            })
+            .then((res) => setProperties(res.data))
+            .catch((err) => console.log(err));
     }, []);
 
     const center = [23.0225, 72.5714];
@@ -27,14 +41,26 @@ function PropertyList() {
     return (
         <div className="propertylist-container">
             <div className="tabs">
-                <button className={`tab-button ${tab === 0 ? "active" : ""}`} onClick={() => setTab(0)}>Listing</button>
-                <button className={`tab-button ${tab === 1 ? "active" : ""}`} onClick={() => setTab(1)}>Map</button>
-                <button className={`tab-button`} onClick={() => navigate("/login")}>Admindashboard</button>
+                <button
+                    className={`tab-button ${tab === 0 ? "active" : ""}`}
+                    onClick={() => setTab(0)}
+                >
+                    Listing
+                </button>
+                <button
+                    className={`tab-button ${tab === 1 ? "active" : ""}`}
+                    onClick={() => setTab(1)}
+                >
+                    Map
+                </button>
+                <button className="tab-button" onClick={() => navigate("/login")}>
+                    Admindashboard
+                </button>
             </div>
 
             {tab === 0 && (
                 <div className="properties-grid">
-                    {properties.map(p => (
+                    {properties.map((p) => (
                         <div key={p._id} className="property-card">
                             <img src={p.image} alt={p.name} />
                             <div className="property-card-content">
@@ -49,27 +75,38 @@ function PropertyList() {
 
             {tab === 1 && (
                 <div className="map-container">
-                    <MapContainer center={center} zoom={12} style={{ height: "500px", width: "100%" }}>
+                    <MapContainer
+                        center={center}
+                        zoom={12}
+                        style={{ height: "500px", width: "100%" }}
+                    >
                         <TileLayer
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             attribution="&copy; OpenStreetMap contributors"
                         />
 
-                        {properties.map(p => (
+                        {properties.map((p) => (
                             <Marker
                                 key={p._id}
                                 position={[p.latitude, p.longitude]}
                             >
                                 <Popup>
                                     <div className="infowindow">
-                                        <img src={p.image} alt={p.name} style={{ width: "150px", height: "100px", objectFit: "cover" }} />
+                                        <img
+                                            src={p.image}
+                                            alt={p.name}
+                                            style={{
+                                                width: "150px",
+                                                height: "100px",
+                                                objectFit: "cover",
+                                            }}
+                                        />
                                         <h4>{p.name}</h4>
                                         <p>{p.address}</p>
                                     </div>
                                 </Popup>
                             </Marker>
                         ))}
-
                     </MapContainer>
                 </div>
             )}
