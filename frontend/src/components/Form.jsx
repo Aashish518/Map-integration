@@ -7,12 +7,15 @@ import L from "leaflet";
 import "../css/Form.css";
 import Cookies from "js-cookie";
 
+import markerIconPng from "leaflet/dist/images/marker-icon.png";
+import markerShadowPng from "leaflet/dist/images/marker-shadow.png";
+
 const customIcon = new L.Icon({
-    iconUrl: "/marker-icon.png",
+    iconUrl: markerIconPng,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
-    shadowUrl: "/marker-shadow.png",
+    shadowUrl: markerShadowPng,
     shadowSize: [41, 41]
 });
 
@@ -72,7 +75,7 @@ const PropertyForm = () => {
             }
         });
         return formData.latitude && formData.longitude ? (
-            <Marker position={[formData.latitude, formData.longitude]}/>
+            <Marker position={[formData.latitude, formData.longitude]} icon={customIcon} />
         ) : null;
     };
 
@@ -92,11 +95,11 @@ const PropertyForm = () => {
                 headers: { Authorization: token }
             })
                 .then(() => {
-                    navigate("/admin")
+                    navigate("/admin");
                     setStatus(true);
                 })
                 .catch(err => {
-                    console.error("Update error:", err)
+                    console.error("Update error:", err);
                     setStatus(true);
                 });
         } else {
@@ -105,11 +108,11 @@ const PropertyForm = () => {
                 headers: { Authorization: token }
             })
                 .then(() => {
-                    navigate("/admin")
+                    navigate("/admin");
                     setStatus(true);
                 })
                 .catch(err => {
-                    console.error("Add error:", err)
+                    console.error("Add error:", err);
                     setStatus(true);
                 });
         }

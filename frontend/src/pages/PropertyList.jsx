@@ -9,7 +9,6 @@ import L from "leaflet";
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import markerShadowPng from "leaflet/dist/images/marker-shadow.png";
 
-// default icon fix
 const DefaultIcon = L.icon({
     iconUrl: markerIconPng,
     shadowUrl: markerShadowPng,
