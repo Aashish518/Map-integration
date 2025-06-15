@@ -72,7 +72,7 @@ const PropertyForm = () => {
             }
         });
         return formData.latitude && formData.longitude ? (
-            <Marker position={[formData.latitude, formData.longitude]} icon={customIcon} />
+            <Marker position={[formData.latitude, formData.longitude]}/>
         ) : null;
     };
 
